@@ -12,9 +12,7 @@
 #define SCREEN_HEIGHT 600
 
 #define DEFAULT_EDGE_COLOR RED
-
 #define DEFAULT_VERT_COLOR BLACK
-#define DEFAULT_VERT_RADIUS 20
 
 VertList *vert_list = NULL;
 
@@ -36,9 +34,13 @@ int main(void)
             ClearBackground(RAYWHITE);
 
             for (size_t i = 0; i < vert_list->size; i++) {
-                DrawCircleV(vert_list->head[i]->pos, DEFAULT_VERT_RADIUS, DEFAULT_VERT_COLOR);
+                Vert *v = vert_list->verts[i];
+                for (size_t j = 0; j < v->size; j++) {
+                    Edge *e = v->edges[j];
+                    DrawRectanglePro(e->rec, (Vector2){0, 10}, e->rot, DEFAULT_EDGE_COLOR);
+                }
+                DrawCircleV(vert_list->verts[i]->pos, DEFAULT_VERT_RADIUS, DEFAULT_VERT_COLOR);
             }
-            /* DrawRectanglePro(rec, (Vector2){0, 10}, rot, DEFAULT_COLOR); */
         EndDrawing();
     }
     CloseWindow();

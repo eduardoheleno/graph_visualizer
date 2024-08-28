@@ -9,6 +9,7 @@
 typedef struct Vert {
     Vector2 pos;
     size_t size;
+    bool is_selected;
     struct Edge **edges;
 } Vert;
 

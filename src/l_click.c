@@ -12,15 +12,24 @@ void watch_l_click(Rectangle *rec, float *rot)
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         if (orig_vert == NULL) {
             orig_vert = get_clicked_vert();
+            if (orig_vert != NULL) {
+                orig_vert->is_selected = true;
+            }
+
             return;
         }
         if (dest_vert == NULL) {
             dest_vert = get_clicked_vert();
+            if (dest_vert == NULL) {
+                return;
+            }
         }
 
         set_rec_origin(rec);
         set_rec_width(rec, rot);
         set_edge(orig_vert, dest_vert, 10, rec, rot);
+
+        orig_vert->is_selected = false;
 
         orig_vert = NULL;
         dest_vert = NULL;

@@ -13,6 +13,7 @@
 
 #define DEFAULT_EDGE_COLOR RED
 #define DEFAULT_VERT_COLOR BLACK
+#define DEFAULT_SELECTED_VERT_COLOR GREEN
 
 VertList *vert_list = NULL;
 
@@ -39,7 +40,12 @@ int main(void)
                     Edge *e = v->edges[j];
                     DrawRectanglePro(e->rec, (Vector2){0, 10}, e->rot, DEFAULT_EDGE_COLOR);
                 }
-                DrawCircleV(vert_list->verts[i]->pos, DEFAULT_VERT_RADIUS, DEFAULT_VERT_COLOR);
+
+                if (v->is_selected) {
+                    DrawCircleV(v->pos, DEFAULT_VERT_RADIUS, DEFAULT_SELECTED_VERT_COLOR);
+                } else {
+                    DrawCircleV(v->pos, DEFAULT_VERT_RADIUS, DEFAULT_VERT_COLOR);
+                }
             }
         EndDrawing();
     }

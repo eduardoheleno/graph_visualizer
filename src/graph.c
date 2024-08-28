@@ -4,6 +4,7 @@ Vert *create_vert(Vector2 pos)
 {
     Vert *v = malloc(sizeof(Vert));
     v->pos = pos;
+    v->is_selected = false;
     v->edges = NULL;
 
     return v;

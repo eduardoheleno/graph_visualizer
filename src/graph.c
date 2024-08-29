@@ -1,11 +1,13 @@
 #include "graph.h"
+#include <raylib.h>
 
-Vert *create_vert(Vector2 pos)
+Vert *create_vert(Vector2 pos, unsigned int index)
 {
     Vert *v = malloc(sizeof(Vert));
     v->pos = pos;
     v->is_selected = false;
     v->edges = NULL;
+    v->index = index;
 
     return v;
 }
@@ -23,9 +25,14 @@ Edge *create_edge(Vert *dest, size_t weight, Rectangle rec, float rot)
 
 void set_edge(Vert *orig, Vert *dest, size_t weight, Rectangle *rec, float *rot)
 {
-    Edge *e = create_edge(dest, weight, *rec, *rot);
-    orig->size++;
+    Edge *e1 = create_edge(dest, weight, *rec, *rot);
+    Edge *e2 = create_edge(orig, weight, *rec, *rot);
 
+    orig->size++;
     orig->edges = realloc(orig->edges, sizeof(Edge*) * orig->size);
-    orig->edges[orig->size - 1] = e;
+    orig->edges[orig->size - 1] = e1;
+
+    dest->size++;
+    dest->edges = realloc(dest->edges, sizeof(Edge*) * dest->size);
+    dest->edges[dest->size - 1] = e2;
 }

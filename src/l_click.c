@@ -7,6 +7,27 @@ Vert *dest_vert = NULL;
 
 extern VertList *vert_list;
 
+void graph_render()
+{
+    if (vert_list == NULL || vert_list->size == 0) return;
+
+    for (size_t i = 0; i < vert_list->size; i++) {
+        Vert *v = vert_list->verts[i];
+        for (size_t j = 0; j < v->size; j++) {
+            Edge *e = v->edges[j];
+            if (e->dest_vert->index < v->index) continue;
+
+            DrawRectanglePro(e->rec, (Vector2){0, 10}, e->rot, DEFAULT_EDGE_COLOR);
+        }
+
+        if (v->is_selected) {
+            DrawCircleV(v->pos, DEFAULT_VERT_RADIUS, DEFAULT_SELECTED_VERT_COLOR);
+        } else {
+            DrawCircleV(v->pos, DEFAULT_VERT_RADIUS, DEFAULT_VERT_COLOR);
+        }
+    }
+}
+
 void watch_l_click(Rectangle *rec, float *rot)
 {
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {

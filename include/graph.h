@@ -6,18 +6,25 @@
 
 #define DEFAULT_VERT_RADIUS 20
 
+#define DEFAULT_EDGE_COLOR RED
+#define DEFAULT_VERT_COLOR BLACK
+#define DEFAULT_SELECTED_VERT_COLOR GREEN
+
 typedef struct Vert {
     Vector2 pos;
     size_t size;
     bool is_selected;
+    unsigned int index;
+
     struct Edge **edges;
 } Vert;
 
 typedef struct Edge {
     size_t weight;
-    Vert *dest_vert;
     Rectangle rec;
     float rot;
+
+    Vert *dest_vert;
 } Edge;
 
 typedef struct VertList {
@@ -25,7 +32,7 @@ typedef struct VertList {
     Vert **verts;
 } VertList;
 
-Vert *create_vert(Vector2 pos);
+Vert *create_vert(Vector2 pos, unsigned int index);
 Edge *create_edge(Vert *dest, size_t weight, Rectangle rec, float rot);
 void set_edge(Vert *orig, Vert *dest, size_t weight,
     Rectangle *rec, float *rot);

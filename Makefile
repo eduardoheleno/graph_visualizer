@@ -6,7 +6,7 @@ SRC_FILES := src/graph.c src/r_click.c src/l_click.c src/main.c
 all: a.out run
 
 a.out: $(SRC_FILES)
-	$(COMPILER) $(CFLAGS) $(SRC_FILES) -o a.out $(LDFLAGS)
+	$(COMPILER) $(CFLAGS) $(SRC_FILES) -g -o a.out $(LDFLAGS)
 
 run:
 	./a.out

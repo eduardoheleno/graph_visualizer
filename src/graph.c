@@ -59,6 +59,7 @@ void find_shortest_path(VertList *vert_list, unsigned int orig, unsigned int des
                 (e->dest_vert->shortest_path_value == -1 || e->dest_vert->shortest_path_value > cur_v->shortest_path_value + (int)e->weight)
             ) {
                 e->dest_vert->shortest_path_value = cur_v->shortest_path_value + (int)e->weight;
+                e->dest_vert->prev_vert = cur_v;
 
                 if (v_buffer == NULL) {
                     v_buffer = e->dest_vert;
@@ -79,7 +80,6 @@ void find_shortest_path(VertList *vert_list, unsigned int orig, unsigned int des
         }
 
         cur_v->is_explored = true;
-        v_buffer->prev_vert = cur_v;
         cur_v = v_buffer;
         cur_orig_index = cur_v->index;
 

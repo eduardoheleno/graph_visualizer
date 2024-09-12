@@ -41,48 +41,56 @@ void set_edge(Vert *orig, Vert *dest, size_t weight, Rectangle *rec, float *rot)
     dest->edges[dest->size - 1] = e2;
 }
 
+Vert *get_smallest_not_explored_vert(VertList *vert_list)
+{
+    Vert *v = NULL;
+    for (size_t i = 0; i < vert_list->size; i++) {
+        if (
+            (
+                v == NULL &&
+                !vert_list->verts[i]->is_explored &&
+                vert_list->verts[i]->shortest_path_value > 0
+            ) ||
+            (
+                !vert_list->verts[i]->is_explored &&
+                vert_list->verts[i]->shortest_path_value > 0 &&
+                v->shortest_path_value > vert_list->verts[i]->shortest_path_value
+            )
+        ) {
+            v = vert_list->verts[i];
+        }
+    }
+
+    return v;
+}
+
 // Dijkstra's algorithm
 void find_shortest_path(VertList *vert_list, unsigned int orig, unsigned int dest)
 {
     if (vert_list == NULL || vert_list->size == 0) return;
 
     unsigned int cur_orig_index = orig;
-    Vert *v_buffer = NULL;
+
     Vert *cur_v = vert_list->verts[cur_orig_index];
     cur_v->shortest_path_value = 0;
+    cur_v->is_explored = true;
 
-    while (cur_orig_index != dest) {
+    while (!vert_list->verts[dest]->is_explored) {
         for (size_t i = 0; i < cur_v->size; i++) {
             Edge *e = cur_v->edges[i];
             if (
                 !e->dest_vert->is_explored &&
-                (e->dest_vert->shortest_path_value == -1 || e->dest_vert->shortest_path_value > cur_v->shortest_path_value + (int)e->weight)
+                (
+                    e->dest_vert->shortest_path_value < 0 ||
+                    e->dest_vert->shortest_path_value > cur_v->shortest_path_value + (int)e->weight
+                )
             ) {
-                e->dest_vert->shortest_path_value = cur_v->shortest_path_value + (int)e->weight;
+                e->dest_vert->shortest_path_value = cur_v->shortest_path_value + e->weight;
                 e->dest_vert->prev_vert = cur_v;
-
-                if (v_buffer == NULL) {
-                    v_buffer = e->dest_vert;
-                } else {
-                    if (e->dest_vert->shortest_path_value < v_buffer->shortest_path_value) {
-                        v_buffer = e->dest_vert;
-                    }
-                }
-            } else if (!e->dest_vert->is_explored) {
-                if (v_buffer == NULL) {
-                    v_buffer = e->dest_vert;
-                } else {
-                    if (e->dest_vert->shortest_path_value < v_buffer->shortest_path_value) {
-                        v_buffer = e->dest_vert;
-                    }
-                }
             }
         }
 
+        cur_v = get_smallest_not_explored_vert(vert_list);
         cur_v->is_explored = true;
-        cur_v = v_buffer;
-        cur_orig_index = cur_v->index;
-
-        v_buffer = NULL;
     }
 }

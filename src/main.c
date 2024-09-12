@@ -13,7 +13,22 @@
 
 VertList *vert_list = NULL;
 
-void graph_render()
+void vert_render()
+{
+    if (vert_list == NULL || vert_list->size == 0) return;
+
+    for (size_t i = 0; i < vert_list->size; i++) {
+        Vert *v = vert_list->verts[i];
+        if (v->is_selected) {
+            DrawCircleV(v->pos, DEFAULT_VERT_RADIUS, DEFAULT_SELECTED_VERT_COLOR);
+        } else {
+            DrawCircleV(v->pos, DEFAULT_VERT_RADIUS, DEFAULT_VERT_COLOR);
+        }
+        DrawText(TextFormat("%i", v->index), v->pos.x, v->pos.y, 20, WHITE);
+    }
+}
+
+void edge_render()
 {
     if (vert_list == NULL || vert_list->size == 0) return;
 
@@ -25,13 +40,6 @@ void graph_render()
 
             DrawRectanglePro(e->rec, (Vector2){0, 10}, e->rot, DEFAULT_EDGE_COLOR);
         }
-
-        if (v->is_selected) {
-            DrawCircleV(v->pos, DEFAULT_VERT_RADIUS, DEFAULT_SELECTED_VERT_COLOR);
-        } else {
-            DrawCircleV(v->pos, DEFAULT_VERT_RADIUS, DEFAULT_VERT_COLOR);
-        }
-        DrawText(TextFormat("%i", v->index), v->pos.x, v->pos.y, 20, WHITE);
     }
 }
 
@@ -63,28 +71,30 @@ int main(void)
     Rectangle rec = {0, 0, 0, 20};
     float rot = 0;
 
-    bool test = false;
-    bool test2 = false;
+    bool should_find_shortest_path = false;
+    bool should_render_shortest_path = false;
 
     while (!WindowShouldClose()) {
         watch_l_click(&rec, &rot);
         watch_r_click();
 
-        if (IsKeyPressed(KEY_ENTER)) test = true;
+        if (IsKeyPressed(KEY_ENTER)) should_find_shortest_path = true;
 
         BeginDrawing();
             ClearBackground(RAYWHITE);
-            graph_render();
 
-            if (test) {
+            edge_render();
+            if (should_find_shortest_path) {
                 find_shortest_path(vert_list, 0, 3);
-                test = false;
-                test2 = true;
+                should_find_shortest_path = false;
+                should_render_shortest_path = true;
             }
 
-            if (test2) {
+            if (should_render_shortest_path) {
                 render_shortest_path(3);
             }
+            vert_render();
+
         EndDrawing();
     }
     CloseWindow();

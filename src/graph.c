@@ -64,10 +64,20 @@ Vert *get_smallest_not_explored_vert(VertList *vert_list)
     return v;
 }
 
-// Dijkstra's algorithm
-void find_shortest_path(VertList *vert_list, unsigned int orig, unsigned int dest)
+void reset_vert_list(VertList *vert_list)
 {
-    if (vert_list == NULL || vert_list->size == 0) return;
+    for (size_t i = 0; i < vert_list->size; i++) {
+        Vert *v = vert_list->verts[i];
+        v->shortest_path_value = -1;
+        v->is_explored = false;
+        v->prev_vert = NULL;
+    }
+}
+
+// Dijkstra's algorithm
+bool find_shortest_path(VertList *vert_list, unsigned int orig, unsigned int dest)
+{
+    if (vert_list == NULL || vert_list->size == 0) return false;
 
     unsigned int cur_orig_index = orig;
 
@@ -91,6 +101,12 @@ void find_shortest_path(VertList *vert_list, unsigned int orig, unsigned int des
         }
 
         cur_v = get_smallest_not_explored_vert(vert_list);
+        if (cur_v == NULL) {
+            return false;
+        }
+
         cur_v->is_explored = true;
     }
+
+    return true;
 }

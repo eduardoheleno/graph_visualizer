@@ -60,12 +60,20 @@ void render_shortest_path(unsigned int dest)
     }
 }
 
-int main(void)
+int main(int argc, char **argv)
 {
+    if (argc < 3) {
+        printf("./spv [ORIG] [DEST]\n");
+        return 1;
+    }
+
+    int orig_vert = atoi(argv[1]);
+    int dest_vert = atoi(argv[2]);
+
     vert_list = malloc(sizeof(VertList));
     vert_list->size = 0;
 
-    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Window");
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Shortest path");
     SetTargetFPS(60);
 
     Rectangle rec = {0, 0, 0, 20};
@@ -85,13 +93,17 @@ int main(void)
 
             edge_render();
             if (should_find_shortest_path) {
-                find_shortest_path(vert_list, 0, 3);
+                reset_vert_list(vert_list);
+                if (!find_shortest_path(vert_list, orig_vert, dest_vert)) {
+                    printf("Target destination doesn't exists inside graph\n");
+                    return 1;
+                }
                 should_find_shortest_path = false;
                 should_render_shortest_path = true;
             }
 
             if (should_render_shortest_path) {
-                render_shortest_path(3);
+                render_shortest_path(dest_vert);
             }
             vert_render();
 

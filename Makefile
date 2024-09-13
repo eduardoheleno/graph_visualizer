@@ -6,10 +6,10 @@ SRC_FILES := src/graph.c src/r_click.c src/l_click.c src/main.c
 all: a.out run
 
 a.out: $(SRC_FILES)
-	$(COMPILER) $(CFLAGS) $(SRC_FILES) -g -o a.out $(LDFLAGS)
+	$(COMPILER) $(CFLAGS) $(SRC_FILES) -g -o spv $(LDFLAGS)
 
 run:
-	./a.out
+	./spv 2 4
 
 clean:
 	rm -f a.out

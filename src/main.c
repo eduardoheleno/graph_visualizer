@@ -65,7 +65,7 @@ void render_shortest_path(unsigned int dest)
 int main(int argc, char **argv)
 {
     if (argc < 3) {
-        printf("./spv [ORIG] [DEST]\n");
+        printf("spv [ORIG] [DEST]\n");
         return 1;
     }
 
@@ -89,7 +89,7 @@ int main(int argc, char **argv)
         watch_r_click(&vert_index);
 
         if (IsKeyPressed(KEY_ENTER)) should_find_shortest_path = true;
-        if (IsKeyPressed(KEY_R)) {
+        if (IsKeyPressed(KEY_R) && vert_list->size > 0) {
             reset_vert_list(vert_list);
             vert_index = 0;
             should_render_shortest_path = false;
@@ -117,6 +117,11 @@ int main(int argc, char **argv)
         EndDrawing();
     }
     CloseWindow();
+
+    if (vert_list->size > 0) {
+        reset_vert_list(vert_list);
+    }
+    free(vert_list);
 
     return 0;
 }

@@ -8,8 +8,11 @@ void reset_vert_list(VertList *vert_list)
             free(v->edges[j]);
         }
 
+        free(v->edges);
         free(v);
     }
 
+    free(vert_list->verts);
+    vert_list->verts = NULL;
     vert_list->size = 0;
 }

@@ -41,7 +41,7 @@ Vert *create_vert(Vector2 pos, unsigned int index);
 Edge *create_edge(Vert *dest, size_t weight, Rectangle rec, float rot);
 void set_edge(Vert *orig, Vert *dest, size_t weight,
     Rectangle *rec, float *rot);
-void reset_vert_list(VertList *vert_list);
+void reset_shortest_path(VertList *vert_list);
 bool find_shortest_path(VertList *vert_list, unsigned int orig, unsigned int dest);
 
 #endif // GRAPH_H_

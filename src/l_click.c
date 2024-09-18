@@ -2,6 +2,8 @@
 #include "graph.h"
 #include <raylib.h>
 
+#include <stdio.h>
+
 Vert *orig_vert = NULL;
 Vert *dest_vert = NULL;
 
@@ -21,6 +23,18 @@ void watch_l_click(Rectangle *rec, float *rot)
         if (dest_vert == NULL) {
             dest_vert = get_clicked_vert();
             if (dest_vert == NULL) {
+                return;
+            }
+        }
+        if (orig_vert->index == dest_vert->index) {
+            dest_vert = NULL;
+            return;
+        }
+
+        for (size_t i = 0; i < orig_vert->size; i++) {
+            Edge *e = orig_vert->edges[i];
+            if (e->dest_vert->index == dest_vert->index) {
+                dest_vert = NULL;
                 return;
             }
         }

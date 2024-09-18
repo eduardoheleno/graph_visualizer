@@ -7,11 +7,13 @@
 #include "graph.h"
 #include "l_click.h"
 #include "r_click.h"
+#include "reset.h"
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
 VertList *vert_list = NULL;
+static unsigned int vert_index = 0;
 
 void vert_render()
 {
@@ -84,18 +86,23 @@ int main(int argc, char **argv)
 
     while (!WindowShouldClose()) {
         watch_l_click(&rec, &rot);
-        watch_r_click();
+        watch_r_click(&vert_index);
 
         if (IsKeyPressed(KEY_ENTER)) should_find_shortest_path = true;
+        if (IsKeyPressed(KEY_R)) {
+            reset_vert_list(vert_list);
+            vert_index = 0;
+            should_render_shortest_path = false;
+        }
 
         BeginDrawing();
             ClearBackground(RAYWHITE);
 
             edge_render();
             if (should_find_shortest_path) {
-                reset_vert_list(vert_list);
+                reset_shortest_path(vert_list);
                 if (!find_shortest_path(vert_list, orig_vert, dest_vert)) {
-                    printf("Target destination doesn't exists inside graph\n");
+                    printf("Target origin or destination doesn't exists inside graph\n");
                     return 1;
                 }
                 should_find_shortest_path = false;

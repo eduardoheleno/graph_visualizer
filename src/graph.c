@@ -64,7 +64,7 @@ Vert *get_smallest_not_explored_vert(VertList *vert_list)
     return v;
 }
 
-void reset_vert_list(VertList *vert_list)
+void reset_shortest_path(VertList *vert_list)
 {
     for (size_t i = 0; i < vert_list->size; i++) {
         Vert *v = vert_list->verts[i];
@@ -78,6 +78,7 @@ void reset_vert_list(VertList *vert_list)
 bool find_shortest_path(VertList *vert_list, unsigned int orig, unsigned int dest)
 {
     if (vert_list == NULL || vert_list->size == 0) return false;
+    if (vert_list->size - 1 < orig) return false;
 
     unsigned int cur_orig_index = orig;
 
